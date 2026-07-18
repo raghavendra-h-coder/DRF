@@ -28,3 +28,25 @@ class StudentSerializer(serializers.Serializer):
                 "Students below 21 cannot use a company email."
             )
         return attrs
+
+class StudentModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = "__all__"
+
+    def validate(self, attrs):
+        age = attrs["age"]
+        email = attrs["email"]
+        if age < 21 and email.endswith("@company.com"):
+            raise serializers.ValidationError(
+                "Students below 21 cannot use a company email."
+            )
+        return attrs
+
+    def validate_age(self, value):
+        if value < 14:
+            raise serializers.ValidationError(
+                "Age must be at least 14."
+            )
+
+        return value

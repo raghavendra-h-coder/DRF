@@ -1,11 +1,12 @@
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Student
-from .serializers import StudentSerializer
+from .serializers import StudentSerializer, StudentModelSerializer
 
 
 @csrf_exempt
@@ -53,6 +54,7 @@ class StudentAPIView(APIView):
             many=True
         )
         return Response(serializer.data)
+
     def post(self, request):
         serializer = StudentSerializer(data=request.data)
         if serializer.is_valid():
@@ -61,4 +63,28 @@ class StudentAPIView(APIView):
         return Response(
             serializer.errors,
             status=400
+        )
+
+class Student_ModelSerializerAPIView(APIView):
+    def get(self, request):
+        students = Student.objects.all()
+        serializer = StudentModelSerializer(
+            students,
+            many=True
+        )
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = StudentModelSerializer(
+            data=request.data
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
         )
