@@ -30,6 +30,7 @@ class StudentSerializer(serializers.Serializer):
         return attrs
 
 class StudentModelSerializer(serializers.ModelSerializer):
+    is_young = serializers.SerializerMethodField()
     class Meta:
         model = Student
         fields = "__all__"
@@ -50,3 +51,6 @@ class StudentModelSerializer(serializers.ModelSerializer):
             )
 
         return value
+
+    def get_is_young(self, obj):
+        return obj.age <= 21

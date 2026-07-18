@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'students',
     'django_filters',
     'rest_framework',
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -126,5 +127,10 @@ STATIC_URL = 'static/'
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS":
     "students.pagination.StudentPagination",
-    "PAGE_SIZE": 5
+    "PAGE_SIZE": 5,
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    )
 }
+
+
